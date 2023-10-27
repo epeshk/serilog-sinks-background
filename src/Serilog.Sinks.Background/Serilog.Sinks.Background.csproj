@@ -1,0 +1,56 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net6.0;netstandard2.0</TargetFrameworks>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <AssemblyOriginatorKeyFile>../../assets/Serilog.snk</AssemblyOriginatorKeyFile>
+        <SignAssembly>true</SignAssembly>
+
+        <PackageId>Serilog.Sinks.Background</PackageId>
+        <Version>0.0.1</Version>
+        <PackageVersion>0.0.1</PackageVersion>
+
+        <PackageTags>serilog;async;background;disruptor</PackageTags>
+        <PackageIcon>images\icon.png</PackageIcon>
+        <PackageProjectUrl>https://github.com/epeshk/serilog-sinks-background</PackageProjectUrl>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/epeshk/serilog-sinks-background</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <RootNamespace>Serilog</RootNamespace>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <EnableSourceLink Condition="'$(EnableSourceLink)' == ''">false</EnableSourceLink>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+        <DefineConstants>UTF8_RENDERING</DefineConstants>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageDescription>An alternative high performance asynchronous wrapper for other Serilog sinks.</PackageDescription>
+
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Serilog" Version="2.10.0" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+        <PackageReference Include="System.Memory" Version="4.5.5"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Include="..\BackgroundLogger\Disruptor\**" LinkBase="Disruptor\" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\README.md" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\README.md" Pack="true" Visible="false" PackagePath="README.md" />
+        <None Include="..\..\assets\serilog-sink-nuget.png" Pack="true" Visible="false" PackagePath="images\icon.png" />
+    </ItemGroup>
+
+</Project>
