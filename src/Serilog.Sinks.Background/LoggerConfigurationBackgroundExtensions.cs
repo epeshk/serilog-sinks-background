@@ -1,4 +1,6 @@
 ﻿using Serilog.Configuration;
+using Serilog.Core;
+using Serilog.Events;
 using Serilog.Sinks.Background;
 
 // ReSharper disable once CheckNamespace
@@ -21,14 +23,20 @@ public static class LoggerConfigurationBackgroundExtensions
   ///   room is made in the queue.
   /// </param>
   /// <param name="blockWhenFull">Block when the queue is full, instead of dropping events.</param>
+  /// <param name="restrictedToMinimumLevel">The minimum level for
+  /// events passed through the sink. Ignored when <paramref name="levelSwitch"/> is specified.</param>
+  /// <param name="levelSwitch">A switch allowing the pass-through minimum level
+  /// to be changed at runtime.</param>
   /// <returns>A <see cref="LoggerConfiguration" /> allowing configuration to continue.</returns>
   public static LoggerConfiguration Background(
     this LoggerSinkConfiguration loggerSinkConfiguration,
     Action<LoggerSinkConfiguration> configure,
     int bufferSize = 16 * 1024,
-    bool blockWhenFull = false)
+    bool blockWhenFull = false,
+    LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
+    LoggingLevelSwitch? levelSwitch = null
+    )
   {
-#pragma warning disable CS0618 // Type or member is obsolete // Obsolete only in old Serilog versions
     return LoggerSinkConfiguration.Wrap(
       loggerSinkConfiguration,
       wrappedSink => Sink = new BackgroundSink(wrappedSink, new BackgroundSinkSettings
@@ -36,8 +44,9 @@ public static class LoggerConfigurationBackgroundExtensions
         BufferSize = bufferSize,
         BlockWhenFull = blockWhenFull
       }),
-      configure);
-#pragma warning restore CS0618 // Type or member is obsolete
+      configure,
+      restrictedToMinimumLevel,
+      levelSwitch);
   }
 
   /// <remarks>
